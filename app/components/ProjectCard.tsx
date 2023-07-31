@@ -1,0 +1,27 @@
+import Image from "next/image";
+import Link from "next/link";
+
+export interface ProjectCardsProps {
+    title: string,
+    description: string,
+    icon: string,
+    date: Date,
+    alt: string,
+}
+
+export default function ProjectCard({ title, description, icon, date, alt }: ProjectCardsProps) {
+
+    return <Link href={`/projects/${title}`}>
+        <div className="flex flex-col gap-1 p-6 border-4 border-gray-800 rounded-xl">
+            <div className="flex flex-row justify-between gap-8">
+                <h1 className="text-2xl font-bold">{title}</h1>
+                <Image src={icon} width="36" height="30" alt={alt}></Image>
+            </div>
+            <p className="text-gray-400 font-light">{date.toDateString()}</p>
+            <p className="max-w-sm">{description}</p>
+            <div className="w-14 h-14 rounded-full bg-secondary self-center flex justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="fill-gray-200" height="48" viewBox="0 -960 960 960" width="48"><path d="M686-450H160v-60h526L438-758l42-42 320 320-320 320-42-42 248-248Z" /></svg>
+            </div>
+        </div>
+    </Link>
+}
