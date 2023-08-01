@@ -29,10 +29,13 @@ module.exports = {
             emerald: colors.emerald,
             indigo: colors.indigo,
             yellow: colors.yellow,
+            blue: colors.blue,
             primary: '#061019',
             secondary: "#0A253D",
             white: '#E5E7EB'
         }
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/typography'),
+    ],
 }

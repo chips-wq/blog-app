@@ -1,13 +1,52 @@
-# is this thing on ?
+---
+title: PBInfo Cuie
+author: Sabou Ioan-Alexandru
+description: rezolvare cuie
+tags: code, c++, algorithms, dynamic programming
+date: 2021-04-22
+---
 
-$x = 3$
+INPUT(exemplu):
+```
+8 5
+3 2 4 3 3 5 3 1
+```
 
-$$\int x^3 dx$$
-I am curios how this thing will work
+Precizare:
+O secventa reprezinta o insiruire continua de elemente (poate fi reprezentata prin doi pointeri `st` si `dr`)
+# Algoritm general
+Daca am o secventa, pot sa micsorez cuiele mai mari pana la cel mai mic, si pot calcula cate batai am nevoie ca sa fac asta.
 
-| Beep |   No.  |   Boop |
-| :--- | :----: | -----: |
-| beep |  1024  |    xyz |
-| boop | 338845 |    tuv |
-| foo  |  10106 | qrstuv |
-| bar  |   45   |   lmno |
+Ex.
+
+Am secventa `2 4 3 3`
+Le micsorez pe toate la `2`(pentru ca e minim) si am nevoie de `4` batai de ciocan.
+- 2 ca sa micsorez elementul cu valoare 4
+- 1 pentru elementul cu valoarea 3
+- 1 pentru elementul cu valoarea 3
+
+
+`nr_batai = sum(secventa) - min(secventa) * size(secventa)`
+
+Deci trebuie sa trec prin toate secventele valide (pentru care `nr_batai <= m`), si sa mentin o variabila `ans` ce reprezinta lungimea maxima a unei secvente valide.
+
+Pe langa asta trebuie sa mentin si o variabila `k` = numarul minim de batai din toate secventele valide ce au lungimea maxima
+
+Folosesc two pointers si greedy.
+Plec cu `st=dr=0`
+- Incrementez `dr` cat timp am o secventa VALIDA (incercand sa ii maresc lungimea)
+- Incrementez `st` cat timp am o secventa INVALIDA (plec in continuare in vector ca sa gasesc secvente valide mai incolo)
+
+# Cum determin eficient daca am o secventa valida ?
+
+Problema se reduce la determinarea minimului din secventa. 
+
+
+```c++
+#include <iostream>
+
+int main(){
+    cout << "is this thing on " << endl;
+}
+
+```

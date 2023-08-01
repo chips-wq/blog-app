@@ -8,7 +8,6 @@ async function getProjects() {
     const projectsDirectory = path.join(process.cwd(), 'app/projects-data')
     const filenames = await fs.readdir(projectsDirectory)
 
-    console.log(filenames)
 
     const projects = await Promise.all(filenames.map(async (filename) => {
         const filePath = path.join(projectsDirectory, filename)
@@ -23,7 +22,6 @@ async function getProjects() {
         return projectData
     }))
 
-    console.log(projects)
 
     //console.log(projects)
     // // By returning { props: { posts } }, the Blog component
