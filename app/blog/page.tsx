@@ -1,13 +1,13 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { PostFrontmatter } from "./[slug]/page"
+import { PostFrontmatter, convertFrontmatterPrimitiveToObj } from "./[slug]/helper"
 import BlogClient from './blog-client'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
     title: "chipswq Blog",
-    description: "Articles about Computer Science, Software Engineering or any topics I am interested in",
+    description: "Articles about Computer Science, Software Engineering, Philosophy or any other topics I am interested in.",
 }
 
 async function getPosts() {
@@ -17,7 +17,7 @@ async function getPosts() {
 
     const postsString = await Promise.all(postsPathsArr.map(async (post) => await fs.readFile(post, 'utf-8')))
 
-    const frontmatterPosts = postsString.map(post => matter(post).data) as Array<PostFrontmatter>
+    const frontmatterPosts = postsString.map(post => convertFrontmatterPrimitiveToObj(matter(post).data))
 
 
     return frontmatterPosts

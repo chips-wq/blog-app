@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={`${poppins.className} bg-primary text-white mx-5 flex justify-center`}>
+            <body className={`${poppins.className} bg-primary text-white mx-3 flex justify-center`}>
                 <div className='max-w-7xl w-full'>
                     <Navbar />
                     {children}

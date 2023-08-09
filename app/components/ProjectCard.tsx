@@ -16,7 +16,7 @@ export default function ProjectCard({ title, description, icon, date, alt }: Pro
                 <h1 className="text-2xl font-bold">{title}</h1>
                 <Image src={icon} width="36" height="30" alt={alt}></Image>
             </div>
-            <p className="text-gray-400 font-light">{date.toDateString()}</p>
+            <p className="text-gray-400 font-light text-sm">First commit: {date.toDateString()}</p>
             <p className="">{description}</p>
         </div>
         {/* <div className="w-14 h-14 rounded-full bg-secondary self-center flex justify-center items-center">

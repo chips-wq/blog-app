@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: "chipswq Blog",
-    description: "Articles about Computer Science, Software Engineering or any topics I am interested in",
+    description: "Articles about Computer Science, Software Engineering, Philosophy or any other topics I am interested in.",
 }
 
 async function getProjects() {
@@ -35,7 +35,7 @@ export default async function Home() {
 
     return (
         <div>
-            <div className='px-2 mt-24 flex flex-col '>
+            <div className='mt-24 flex flex-col '>
                 <div className='self-center'>
                     <h1 className='text-2xl sm:text-4xl font-bold p-1'>Sabou Ioan-Alexandru</h1>
                     <div className="border rounded-sm border-gray-600 w-full mb-3"></div>
