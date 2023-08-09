@@ -11,12 +11,20 @@ import "./github.dark.min.css"
 import "katex/dist/katex.min.css";
 import path from 'path';
 
-type PostFrontmatter = {
+
+export type PostFrontmatter = {
     title: string,
     author: string,
     description: string,
     tags: string,
     date: Date
+}
+
+export async function generateStaticParams() {
+    const projectsDirectory = path.join(process.cwd(), 'content')
+    const filenames = await fs.readdir(projectsDirectory)
+
+    return filenames.map(filename => ({ slug: filename.replace(".mdx", "") }))
 }
 
 async function getPost(slug: string) {
@@ -59,8 +67,9 @@ export default async function BlogPost({ params }: { params: { slug: string } })
     return (
         <div>
             <h1 className='text-3xl lg:text-5xl border-b-4 inline-block border-blue-500 my-4 font-bold'>{frontmatter.title}</h1>
-            <p className='text-base font-light mb-4'>Authors: {frontmatter.author}</p>
+            <p className='text-base font-light mb-4 text-gray-400'>{frontmatter.date.toDateString()} \ {frontmatter.author}</p>
             <div className='prose prose-invert max-w-none prose-pre:bg-gray-800 prose-code:!bg-gray-800'>
+                {/* the prose handles typography of html I don't control (coming from mdx) */}
                 {compiledMdx}
             </div>
         </div>

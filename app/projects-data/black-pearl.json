@@ -1,0 +1,7 @@
+{
+    "title": "Real Estate Website",
+    "description": "A presentation website for a real-estate company, statically generated using Flask",
+    "date": "03-07-2022",
+    "icon": "/black-pearl.png",
+    "alt": "black-pearl-icon"
+}

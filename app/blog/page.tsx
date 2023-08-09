@@ -1,38 +1,32 @@
-
 import { promises as fs } from 'fs'
+import path from 'path'
+import matter from 'gray-matter'
+import { PostFrontmatter } from "./[slug]/page"
+import BlogClient from './blog-client'
+import { Metadata } from 'next'
 
-function getPosts() {
-
-    console.log(process.cwd())
-    //make this shit async
-    return;
-    // const files = fs.readdirSync(`${process.cwd()}/content/`);
-
-    // const posts = files.map((filename) => {
-    //     const markdownWithMetadata = fs
-    //         .readFileSync(`content/${filename}`)
-    //         .toString();
-
-    //     const { data } = matter(markdownWithMetadata);
-
-    //     const frontmatter = {
-    //         ...data,
-    //         date: data.date.toISOString(),
-    //         filename: filename.replace(".mdx", ""),
-    //     };
-
-    //     frontmatter['author'] = frontmatter['author'] || 'Neo Wang'
-
-    //     return {
-    //         slug: filename.replace(".mdx", ""),
-    //         frontmatter,
-    //     };
-    // });
+export const metadata: Metadata = {
+    title: "chipswq Blog",
+    description: "Articles about Computer Science, Software Engineering or any topics I am interested in",
 }
 
-export default function Blog() {
+async function getPosts() {
+    const postsPath = path.join(process.cwd(), 'content');
 
-    return <div>
-        blog homepage
-    </div>
+    const postsPathsArr = (await fs.readdir(postsPath)).map(postname => path.join(postsPath, postname))
+
+    const postsString = await Promise.all(postsPathsArr.map(async (post) => await fs.readFile(post, 'utf-8')))
+
+    const frontmatterPosts = postsString.map(post => matter(post).data) as Array<PostFrontmatter>
+
+
+    return frontmatterPosts
+}
+
+export default async function Blog() {
+
+    const frontmatterPosts = await getPosts();
+
+
+    return <BlogClient frontmatterPosts={frontmatterPosts}></BlogClient>
 }
