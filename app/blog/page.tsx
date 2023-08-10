@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { PostFrontmatter, convertFrontmatterPrimitiveToObj } from "./[slug]/helper"
+import { convertFrontmatterPrimitiveToObj } from "./[slug]/helper"
 import BlogClient from './blog-client'
 import { Metadata } from 'next'
 

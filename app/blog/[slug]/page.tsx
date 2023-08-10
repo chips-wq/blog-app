@@ -59,7 +59,7 @@ export default async function BlogPost({ params, searchParams }: Props) {
             <div className="flex mb-1 gap-2">
                 {frontmatter.tags.map((tag, id) => <PostTag key={id} text={tag} />)}
             </div>
-            <p className='text-base font-light mb-4 text-gray-400'>{frontmatter.date.toDateString()} \ {frontmatter.author}</p>
+            <p className='text-base font-light mb-4 text-gray-400'>{frontmatter.date.toDateString()} by {frontmatter.author}</p>
             <div className='prose prose-invert max-w-4xl mx-auto md:text-lg prose-pre:bg-gray-800 prose-code:!bg-gray-800 prose-p:text-gray-100'>
                 {compiledMdx}
             </div>
