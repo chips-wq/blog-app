@@ -3,5 +3,6 @@
     "description": "A presentation website for a real-estate company, statically generated using Flask",
     "date": "01-14-2022",
     "icon": "/black-pearl.png",
-    "alt": "black-pearl-icon"
+    "alt": "black-pearl-icon",
+    "link": "https://blackpearlresidence.ro/"
 }

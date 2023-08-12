@@ -3,5 +3,6 @@
     "description": "A web app to track classes and assignments with a fully working chat",
     "date": "07-21-2021",
     "icon": "/timetable.svg",
-    "alt": "timetable-icon"
+    "alt": "timetable-icon",
+    "link": ""
 }

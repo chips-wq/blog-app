@@ -3,5 +3,6 @@
     "description": "A mobile app helping people learn for the Romanian National Driving Exam.",
     "date": "08-19-2022",
     "icon": "/drpciv-training.png",
-    "alt": "wheel-icon"
+    "alt": "wheel-icon",
+    "link": "https://github.com/chips-wq/chestionar-auto-flutter"
 }
