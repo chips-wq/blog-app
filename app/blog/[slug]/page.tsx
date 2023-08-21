@@ -35,7 +35,7 @@ export async function generateMetadata(
 
 
     return {
-        title: data.title,
+        title: "chipswq Blog | " + data.title,
         description: data.description,
         category: data.tags,
     }

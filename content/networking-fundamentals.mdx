@@ -1,0 +1,279 @@
+---
+title: Networking Fundamentals
+author: Sabou Ioan-Alexandru
+description: This is a blog post that explains networks and their simple components from the perspective of a home user who only knows the definition of a router.
+tags: networking
+date: 2023-20-08
+---
+
+Prerequisites:
+- understand binary (computers use 1's and 0's to communicate and function)
+- understand hex ( a way of representing binary )
+
+# What is networking ?
+
+Networking is a term we use when two computers **communicate** with each other.
+
+Communications of two computers = transmission of **data** (information)
+
+Examples:
+* if you are reading this article, your device (be it phone, pc) communicates with a server on the internet
+    * the server sends **the text** you are reading towards your computer
+    * after this text has arrived, it is your computer's job to **process it, and show it on your screen** (that's what the browser does)
+
+Server = just another computer on the internet, that **serves** information (like the text you are reading)
+
+<img src="/basic_false_image.png"></img>
+
+# What is the internet ?
+
+So far, I have used the term **internet**. What does it mean exactly ?
+
+You probably are familiar with the fact that you pay your ISP (internet service provider), and all of a sudden you have internet.
+
+### But really, what does it mean to have internet ?
+
+In order to answer this question we have to take a step back and really understand what a network is. 
+
+Let's imagine together that two computers are in the same room and we want them to be aware of each other (a.k.a be able to **communicate**).
+
+How exactly would we do that ? Well, let's create a network between them. The simplest manifestation of this is to plug one end of an **ethernet cable** into one of them and **the other end** in the other computer.
+
+### Are they connected now ?
+In order to talk to each other, they need a way to **identify** who they want to talk to.
+<center>
+    <img src="/need_ip.png"/>
+</center>
+
+#### Imagine you want to send a letter to your friend, what do you need ?
+* the message itself (the letter)
+    * which should be addressed in **english**
+* his address
+
+#### What does computer A need to talk to computer B ?
+* the message itself (**a packet**, in technical terms)
+    * which should be addressed using a **set of rules**
+* his IP address
+
+Ok, so how do we give them an ip address. It depends on the operating system, but you **can** add an ip address in the settings of the **OS** you are using.
+This is called a **static IP address**.
+
+After we do this step, we can now communicate. Let's say we have access to the command line of the **computer A**. 
+And let's use the [ping](https://en.wikipedia.org/wiki/Ping_(networking_utility)) networking utility.
+```bash
+$ ping 192.168.1.228
+PING 192.168.1.228 (192.168.1.228) 56(84) bytes of data.
+64 bytes from 192.168.1.228: icmp_seq=4 ttl=63 time=7.21 ms
+64 bytes from 192.168.1.228: icmp_seq=5 ttl=63 time=448 ms
+64 bytes from 192.168.1.228: icmp_seq=6 ttl=63 time=167 ms
+```
+We are getting responses from `192.168.1.228`!
+
+
+<center>
+    <img src="/communicate_ethernet_ip_ping.png"/>
+</center>
+
+You may have noticed we didn't actually type in a `message`. I also mentioned that the message would be addressed using a **set of rules**.
+* a **message** was actually sent and it contained a question of the form **are you online ?**
+* the set of rules is called a **protocol**
+    * when you typed ping, the OS constructed a packet using 
+    * multiple protocols like ICMP, IP (OSI layer 3), MAC address (OSI layer 2)
+* this packet (message) was then sent over the wire (OSI layer 1) by the OS
+
+# What is the OSI Model ?
+
+|        OSI Model       | Think about (to understand)          |
+|:----------------------:|--------------------------------------|
+|     ~~Application~~    |           Not important now          |
+|    ~~Presentation~~    |           Not important now          |
+|       ~~Session~~      |           Not important now          |
+|        Transport       | TCP and UDP protocols (to send data) |
+|  Network (End to end)  |        Routers (IP addresses)        |
+| Data Link (Hop to hop) |  NIC's and Switches (MAC addresses)  |
+|        Physical        |         Wires: like ethernet         |
+
+So how did the above communication actually work ? I threw some random terms at you like ICMP, IP and MAC addresses. Let's take them one by one.
+
+The OSI Model is nothing but a mental representation useful in order to imagine interactions between computers. It contains 7 layers which all have their own roles. When they all work, the network works.
+
+## Physical Layer (Wires)
+
+Think of ethernet cables. In this category we include the medium through which bits (1's and 0's) are sent. They include all types of wires, including fiber optic.
+
+## Data Link (Hop to Hop)
+
+The place where you plug the ethernet cable into is called the **Network Interface Card** (NIC).
+
+Each NIC comes with a burned in address (physical address) called the MAC address. It is **48bits** and usually written with 12 hex digits: `00-B0-D0-63-C2-26`. Below is what a **Network Interface Card** looks like inside.
+
+<center>
+    <img src="/network_card.jpg"/>
+</center>
+
+Hop to Hop (another name for layer 2) refers to the communication that happens between two NIC's. **A hop** represents another NIC. In our previous example the **first hop** was the NIC of computer A and the **second hop** the NIC of computer B.
+
+At this layer, in order to send data to another NIC, we need the NIC's MAC address.
+
+So when we typed `ping 192.168.1.228`, why did we use the ip address then ?
+
+Think of a packet as multiple layers stacked on top of each other, each containing some information. Let's say the topmost layer here is the message 'Are you online ?`. Of course, because computers only understand 1's and 0's we will actually send this encoded as a list of bytes.
+
+<div className="max-w-sm mx-auto">
+| Description  |      Packet      |
+|--------------|------------------|
+| **Layer 4**  | message: Are you online?  |
+| **Layer 3**  | src: **192.168.1.207**, dest: **192.168.1.228**|
+| **Layer 2**  | src-mac: **00-B0-D0-63-C2-26** dst-mac: **BE-FD-D2-64-C2-26** |
+</div>
+
+The need for both mac addresses and ip addresses will become apparent after we understand Layer 3. For now remember we need both.
+
+### What is a switch ?
+<center>
+    <img src="/image_switch.png"/>
+</center>
+A switch is a Layer 2 device (it only processes messages up to the MAC address layer). It is used inside a network to connect multiple computers.
+Imagine now we have to connect 5 computers in the same room and allow them to communicate with the ping utility. We do as before, assign each a **static IP address**.
+
+**This time we need a switch**.
+<img src="/switch_network.png"/>
+<small>Notice they are labeled as hosts now. Imagine a host as a box (a computer) that can communicate using ping.</small>
+
+For the purposes of this talk, imagine the switch has 5 ethernet ports and it knows for each port, **the mac address of the NIC connected to this port**. In more technical terms, the [MAC address](https://www.geeksforgeeks.org/what-is-mac-address-table/) table is filled.
+
+Example:
+
+Let's say host A has
+* ip: 192.168.1.207
+* mac: A2-26 (it is longer than this, but I don't like typing)
+
+Let's say host B has
+* ip: 192.168.1.228
+* mac: B2-26
+
+Host A sends this on the wire. 
+<div className="max-w-sm mx-auto">
+| Description  |      Packet      |
+|--------------|------------------|
+| **Layer 4**  | message: Are you online?  |
+| **Layer 3**  | src: **192.168.1.207**, dest: **192.168.1.228**|
+| **Layer 2**  | src-mac: **A2-26** dst-mac: **B2-26** |
+</div>
+
+When this reaches the switch, this device only looks at the destination mac address (Layer 2) and looks at it's **MAC table** (a pairing between it's ports and MAC addresses).
+
+At this point it realizes the **dst-mac** `B2-26` is on port 3 (for example) and sends it over to host B.
+
+After it reaches **host B**, this guy now looks at the ip address, compares it with it's own and goes: 
+> My lord, this message is meant for me!.
+
+Now host B can respond to the message if it so desires.
+
+This little story should give you a little intuition into why we need both ip's and mac addresses. You see, a hop in this network (to be precise, the switch) was not aware of Layer 3 (ip addresses) while **host B** was aware of ip addresses.
+
+**Switches only direct traffic from hop to hop using MAC addresses**
+
+### ARP Protocol
+In real life, usually host A only has the IP address of host B. So, when sending the message it doesn't know the MAC address. We have a problem here, because to send a packet on the **wire** we need to also fill in the destionation **MAC** address.
+
+<div className="max-w-sm mx-auto">
+| Description  |      Packet      |
+|--------------|------------------|
+| **Layer 4**  | message: Are you online?  |
+| **Layer 3**  | src: **192.168.1.207**, dest: **192.168.1.228**|
+| **Layer 2**  | src-mac: **A2-26** dst-mac: **unkown yet** |
+</div>
+
+In order to solve this problem, the ARP protocol is used. As a high-level overview, the [ARP protocol](https://en.wikipedia.org/wiki/Address_Resolution_Protocol) matches IP addreses on a local network (like this one) to MAC addresses.
+
+In real-life, host A would first send an ARP broadcast. Pretty much asking: **What is the MAC address of the host with IP 192.168.1.228 ?**. This packet looks like:
+<div className="max-w-sm mx-auto">
+| Description  |      Packet      |
+|--------------|------------------|
+| **Layer 4**  | message: give me your mac address |
+| **Layer 3**  | src: **192.168.1.207**, dest: **192.168.1.228**|
+| **Layer 2**  | src-mac: **A2-26** dst-mac: **FF-FF** |
+</div>
+<small>The message is not send at layer 4, actually it is a matter of dispute, this is only for simplicity sake, it doesn't use TCP or UDP.</small>
+<small>The mac FF-FF is reserved for ARP broadcasts and is sent to everyone on the network so that the host with IP `192.168.1.228` can respond with it's MAC.</small>
+
+## Network Layer (End to End)
+
+<img src="/router_traffic.png"/>
+<small>Two networks tied together by a router that **redirects** traffic between them.</small>
+
+The purpose of a router is to route traffic **between different networks**. IP addresses are necessary so the traffic can be routed into another network.
+#### For each network the router is connected to, it has a different IP address. This IP address is called the Default Gateway (way out of network)
+
+### Example
+
+Let's imagine **host A** wants to ping **host F** (in another network).
+
+**Host A knows only the IP address of Host F.**
+
+Host A first determines that host F is not in the same network (using it's IP address and the [Subnet Mask](https://en.wikipedia.org/wiki/Subnet), which we don't talk about here).
+
+After it knows that host F is not in this network, it's job is to send the packet to the **Default Gateway** (the Router). 
+
+First Host A uses ARP to get the MAC of the router and then constructs a packet.
+<div className="max-w-sm mx-auto">
+| Description  |      Packet      |
+|--------------|------------------|
+| **Layer 4**  | message: are you online ? |
+| **Layer 3**  | src: **192.168.1.3**, dest: **10.0.1.7**|
+| **Layer 2**  | src-mac: **A2-26** dst-mac: **RO-TR** |
+</div>
+This is a good representation of what **hop to hop** means. The next hop of this packet is the router, while it's final destination is **host F**, denoted by the IP `10.0.1.7`.
+
+### The Router
+<small>A router is just a piece of hardware capable of routing packets to different networks. It can run linux, windows or any other operating system or not even run an operating system at all. We only care if it can do routing.</small>
+
+Now the above packet has gotten to the router (went through the switch). Internally, this device has a routing table which tells it where to forward packets based on IP addresses.
+
+The router (being a Layer 3 device), looks at the IP address, and based on it's routing table knows to send this packet on the network on the right of the image. 
+
+In order to **get it to the next hop** (host F, final destination in this case), the router uses ARP to get the mac of host F (say FB-26) and constructs a new packet that it then puts on the wire.
+<div className="max-w-sm mx-auto">
+| Description  |      Packet      |
+|--------------|------------------|
+| **Layer 4**  | message: are you online ? |
+| **Layer 3**  | src: **192.168.1.3**, dest: **10.0.1.7**|
+| **Layer 2**  | src-mac: **RO-TR** dst-mac: **FB-26** |
+</div>
+This packet now reaches host F. **Host F** compares the destionation IP to it's IP and then decides to respond or not. 
+
+If host F decides to respond, the way back is a little faster, because the devices don't have to use ARP anymore. All Layer 3 devices on this network (hosts and router) have an internal ARP table in order to optimize the flow of traffic.
+
+## How does a home network work then ?
+You may think I don't have a switch I only have a router. 
+
+What we usually call a router are actually multiple networking components stuffed in one:
+* router
+* switch
+* Acces Point (allows connections over wifi)
+
+The internet is a network of networks. It's just networks like in the above image and they are connected with routing equipment.
+
+<small>In reality, this is of course more complicated, but it's a great way to think about it.</small>
+
+We can use a linux utility called `traceroute` to see the hops we take in order to get to a server.
+
+```bash
+$ traceroute google.com
+traceroute to google.com (142.250.180.206), 30 hops max, 60 byte packets
+1  chipswin11.mshome.net (172.28.48.1)  0.237 ms  0.217 ms  0.145 ms
+2  myrouter.com (192.168.1.1)  0.795 ms  0.558 ms  0.861 ms
+3  10.0.0.1 (10.0.0.1)  9.110 ms  9.105 ms  9.336 ms
+4  10.243.116.97 (10.243.116.97)  9.338 ms  9.308 ms  9.251 ms
+5  10.220.187.177 (10.220.187.177)  44.885 ms 10.220.188.73 (10.220.188.73)  16.759 ms 10.220.187.179 (10.220.187.179)  48.412 ms
+6  10.220.153.18 (10.220.153.18)  28.344 ms 10.220.153.20 (10.220.153.20)  53.334 ms 10.220.178.148 (10.220.178.148)  42.102 ms
+7  72.14.216.212 (72.14.216.212)  49.364 ms  49.317 ms 209.85.168.182 (209.85.168.182)  45.462 ms
+8  * * 74.125.242.241 (74.125.242.241)  26.846 ms
+9  142.251.65.225 (142.251.65.225)  101.783 ms 142.251.65.227 (142.251.65.227)  101.431 ms 172.253.65.36 (172.253.65.36)  101.482 ms
+10  142.251.65.225 (142.251.65.225)  101.406 ms  101.722 ms bud02s33-in-f14.1e100.net (142.250.180.206)  101.734 ms
+```
+
+
+Bibliography:
+* [PracticalNetworking series on **Networking Fundamentals**](https://www.youtube.com/watch?v=bj-Yfakjllc&list=PLIFyRwBY_4bRLmKfP1KnZA6rZbRHtxmXi&ab_channel=PracticalNetworking)
