@@ -3,12 +3,13 @@ title: Networking Fundamentals
 author: Sabou Ioan-Alexandru
 description: This is a blog post that explains networks and their simple components from the perspective of a home user who only knows the definition of a router.
 tags: networking
-date: 2023-20-08
+date: 08-20-2023
 ---
 
 Prerequisites:
-- understand binary (computers use 1's and 0's to communicate and function)
-- understand hex ( a way of representing binary )
+* understand binary (computers use 1's and 0's to communicate and function)
+* understand hex ( a way of representing binary )
+* OS=operating system
 
 # What is networking ?
 
@@ -117,7 +118,7 @@ At this layer, in order to send data to another NIC, we need the NIC's MAC addre
 
 So when we typed `ping 192.168.1.228`, why did we use the ip address then ?
 
-Think of a packet as multiple layers stacked on top of each other, each containing some information. Let's say the topmost layer here is the message 'Are you online ?`. Of course, because computers only understand 1's and 0's we will actually send this encoded as a list of bytes.
+Think of a packet as multiple layers stacked on top of each other, each containing some information. Let's say the topmost layer here is the message `Are you online ?`. Of course, because computers only understand 1's and 0's we will actually send this encoded as a list of bytes.
 
 <div className="max-w-sm mx-auto">
 | Description  |      Packet      |
@@ -175,19 +176,19 @@ This little story should give you a little intuition into why we need both ip's 
 **Switches only direct traffic from hop to hop using MAC addresses**
 
 ### ARP Protocol
-In real life, usually host A only has the IP address of host B. So, when sending the message it doesn't know the MAC address. We have a problem here, because to send a packet on the **wire** we need to also fill in the destionation **MAC** address.
+In real life, usually host A only has the IP address of host B. So, when sending the message it doesn't know the MAC address. We have a problem here, because to send a packet on the **wire** we need to also fill in the destination **MAC** address.
 
 <div className="max-w-sm mx-auto">
 | Description  |      Packet      |
 |--------------|------------------|
 | **Layer 4**  | message: Are you online?  |
 | **Layer 3**  | src: **192.168.1.207**, dest: **192.168.1.228**|
-| **Layer 2**  | src-mac: **A2-26** dst-mac: **unkown yet** |
+| **Layer 2**  | src-mac: **A2-26** dst-mac: **unknown yet** |
 </div>
 
 In order to solve this problem, the ARP protocol is used. As a high-level overview, the [ARP protocol](https://en.wikipedia.org/wiki/Address_Resolution_Protocol) matches IP addreses on a local network (like this one) to MAC addresses.
 
-In real-life, host A would first send an ARP broadcast. Pretty much asking: **What is the MAC address of the host with IP 192.168.1.228 ?**. This packet looks like:
+In real-life, host A would first send an ARP broadcast. Pretty much asking: **What is the MAC address of the host with IP 192.168.1.228 ?** This packet looks like:
 <div className="max-w-sm mx-auto">
 | Description  |      Packet      |
 |--------------|------------------|
@@ -196,6 +197,7 @@ In real-life, host A would first send an ARP broadcast. Pretty much asking: **Wh
 | **Layer 2**  | src-mac: **A2-26** dst-mac: **FF-FF** |
 </div>
 <small>The message is not send at layer 4, actually it is a matter of dispute, this is only for simplicity sake, it doesn't use TCP or UDP.</small>
+
 <small>The mac FF-FF is reserved for ARP broadcasts and is sent to everyone on the network so that the host with IP `192.168.1.228` can respond with it's MAC.</small>
 
 ## Network Layer (End to End)
@@ -262,9 +264,9 @@ We can use a linux utility called `traceroute` to see the hops we take in order 
 ```bash
 $ traceroute google.com
 traceroute to google.com (142.250.180.206), 30 hops max, 60 byte packets
-1  chipswin11.mshome.net (172.28.48.1)  0.237 ms  0.217 ms  0.145 ms
-2  myrouter.com (192.168.1.1)  0.795 ms  0.558 ms  0.861 ms
-3  10.0.0.1 (10.0.0.1)  9.110 ms  9.105 ms  9.336 ms
+1  chipswin11.mshome.net (172.28.48.1)  0.237 ms  0.217 ms  0.145 ms //my computer
+2  myrouter.com (192.168.1.1)  0.795 ms  0.558 ms  0.861 ms //my router
+3  10.0.0.1 (10.0.0.1)  9.110 ms  9.105 ms  9.336 ms //what follows is other routers on the internet
 4  10.243.116.97 (10.243.116.97)  9.338 ms  9.308 ms  9.251 ms
 5  10.220.187.177 (10.220.187.177)  44.885 ms 10.220.188.73 (10.220.188.73)  16.759 ms 10.220.187.179 (10.220.187.179)  48.412 ms
 6  10.220.153.18 (10.220.153.18)  28.344 ms 10.220.153.20 (10.220.153.20)  53.334 ms 10.220.178.148 (10.220.178.148)  42.102 ms
@@ -274,6 +276,11 @@ traceroute to google.com (142.250.180.206), 30 hops max, 60 byte packets
 10  142.251.65.225 (142.251.65.225)  101.406 ms  101.722 ms bud02s33-in-f14.1e100.net (142.250.180.206)  101.734 ms
 ```
 
+This entire discussion has made big abstractions. For a more technical understanding continue with
+* [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) - a way to automatically assign IP addresses (not manually)
+* [NAT](https://en.wikipedia.org/wiki/Network_address_translation) 
+    * used because we don't have enough ip's
+    * a way to allow private ip's behind a home router to talk on the internet
 
 Bibliography:
 * [PracticalNetworking series on **Networking Fundamentals**](https://www.youtube.com/watch?v=bj-Yfakjllc&list=PLIFyRwBY_4bRLmKfP1KnZA6rZbRHtxmXi&ab_channel=PracticalNetworking)
